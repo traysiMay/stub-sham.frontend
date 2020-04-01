@@ -19,7 +19,8 @@ function Show({ artist, venue, date, id, img, purchaseFlow }: Props) {
         <div>{artist}</div>
         <div style={{ textTransform: "capitalize" }}>{venue}</div>
         <div>{dateFormat(date, "dddd, mmmm dS, yyyy")}</div>
-        <div>{dateFormat(date, "h:MM TT")}</div>
+        {/* <div>{dateFormat(date, "h:MM TT")}</div> */}
+        <div>4:20 PM</div>
         <Button>
           <div onClick={() => purchaseFlow(id)}>BUY</div>
         </Button>

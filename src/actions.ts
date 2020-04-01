@@ -15,9 +15,31 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 interface SocketConnected {
   connected: boolean;
 }
+export const forceLoading = (): AppThunk => async dispatch => {
+  dispatch({ type: "TRANS" });
+  setTimeout(() => dispatch({ type: "READY" }), 1500);
+};
 
+const delayThunk = ({
+  type,
+  payload,
+  delay
+}: {
+  type: string;
+  payload: any;
+  delay: number;
+}): AppThunk => async dispatch => {
+  setTimeout(() => dispatch({ type, payload }), delay);
+};
+const socketServer =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_SERVER
+    : "https://relay.raptor.pizza";
 export const connectSocket = (): AppThunk => async dispatch => {
-  const socket = io(process.env.REACT_APP_SERVER as string);
+  const socket = io(socketServer as string, {
+    path: process.env.REACT_APP_SOCKET_PATH,
+    transports: ["websocket"]
+  });
   dispatch({ type: CONNECTING, payload: { socket } });
   socket.on(CONNECTED, (connected: SocketConnected) => {
     if (connected) {
@@ -29,7 +51,11 @@ export const connectSocket = (): AppThunk => async dispatch => {
   );
   socket.on("start", (data: any) => {
     const { onsale, status } = data;
-    dispatch({ type: "INIT_SHOWS", payload: { onsale, status } });
+    // dispatch({ type: "INIT_SHOWS", payload: { onsale, status } });
+    dispatch({
+      type: "INIT_SHOWS",
+      payload: { onsale, status }
+    });
   });
 };
 
@@ -40,7 +66,13 @@ export const initShows = (): AppThunk => dispatch => {
     })
     .then(data => {
       const { onsale, status } = data;
-      dispatch({ type: "INIT_SHOWS", payload: { onsale, status } });
+      dispatch(
+        delayThunk({
+          type: "INIT_SHOWS",
+          payload: { onsale, status },
+          delay: 1500
+        })
+      );
     });
 };
 
@@ -58,21 +90,3 @@ export const sendMessage = (message: string): AppThunk => async (
   const socket = getState().socket.socket as any;
   socket.emit("message", message);
 };
-
-// export const spotifySearch = (artist:string) => {
-//       fetch(process.env.REACT_APP_SERVER + "/search", {
-//       method: "POST",
-//       credentials: "include",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ artist })
-//     })
-//       .then(r => r.json())
-//       .then(data => {
-//         if (data.error && data.error.message === "The access token expired") {
-//           return
-//         } else {
-//           if (data.artists.items.length === 0) setError("nothing found");
-//           setArtists(data.artists.items);
-//         }
-//       });
-// }

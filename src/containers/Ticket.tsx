@@ -12,6 +12,7 @@ const Container = styled.div`
   background: black;
   max-width: 260px;
   border: 2px solid white;
+  overflow-wrap: break-word;
   div {
     * {
       display: block;
@@ -33,8 +34,10 @@ const Container = styled.div`
     text-transform: capitalize;
     .label {
       font-size: 12px;
+      margin-bottom: 8px;
       font-weight: 500;
       color: red;
+      margin-left: -2px;
     }
     .value {
       margin-top: -4px;
@@ -58,7 +61,6 @@ interface Props {
 }
 
 function Ticket({ state }: Props) {
-  console.log(state);
   const [qr, setQr] = useState("" as any);
   const makeQR = async (value: string) => {
     var opts: any = {
@@ -99,7 +101,8 @@ function Ticket({ state }: Props) {
         <div className="venue">{showObject.venue}</div>
         <div className="date">
           {dateFormat(showObject.date, "dddd, mmmm dS")}
-          <div>{dateFormat(showObject.date, "h:MM TT")}</div>
+          {/* <div>{dateFormat(showObject.date, "h:MM TT")}</div> */}
+          <div>4:20 PM</div>
         </div>
       </div>
     </Container>

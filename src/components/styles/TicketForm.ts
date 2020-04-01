@@ -5,6 +5,7 @@ export const Container = styled.div`
   overflow: hidden;
   border: 3px solid white;
   width: 333px;
+  height: 333px;
   margin: 2rem auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -77,8 +78,12 @@ export const Button = styled.div`
   padding: 1rem;
   border: 2px solid white;
   text-align: center;
-  height: 25%;
-  width: 40%;
-  margin: 0 75px;
+  height: 12px;
+  width: 100px;
+  margin: 0 90px;
   background: #1f1f1e;
+  display: flex;
+  align-items: center;
+  /* vertically   */
+  justify-content: center;
 `;

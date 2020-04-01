@@ -6,20 +6,27 @@ const Button = styled.div`
   font-weight: 500;
   font-size: 40px;
   padding: 1rem;
-  background: #6cccf1;
+  background: ${(props: { afterMarket: boolean; selected: boolean }) =>
+    props.afterMarket && !props.selected ? "red" : "#6cccf1"};
   letter-spacing: 1px;
   border: 3px solid white;
   cursor: pointer;
+  text-decoration: ${(props: { afterMarket: boolean; selected: boolean }) =>
+    props.afterMarket && !props.selected ? "line-through" : "none"};
 `;
 
 function PurchaseButton({
+  afterMarket,
   printTicket,
   setOpacity,
-  fullname
+  fullname,
+  selected
 }: {
+  afterMarket: boolean;
   printTicket: any;
   setOpacity: any;
   fullname: string;
+  selected: boolean;
 }) {
   const [purchasing, setPurchasing] = useState(false);
   useEffect(() => {
@@ -41,8 +48,11 @@ function PurchaseButton({
   }, [purchasing]);
   return (
     <Button
+      afterMarket={afterMarket}
+      selected={selected}
       id="purchase-button"
       onClick={() => {
+        if (!selected && afterMarket) return;
         setPurchasing(true);
       }}
     >

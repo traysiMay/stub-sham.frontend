@@ -10,6 +10,7 @@ export type State = {
   onsale: object[];
   status: SaleStatus;
   loading: boolean;
+  tLoading: boolean;
 };
 
 export type ShowPayload = {
@@ -20,7 +21,8 @@ export type ShowPayload = {
 const initialState: State = {
   onsale: [],
   status: SaleStatus.WAITER,
-  loading: true
+  loading: true,
+  tLoading: false
 };
 
 export type OnSale = {
@@ -33,11 +35,14 @@ export type OnSale = {
 };
 
 const reducer = (state: State = initialState, action: Action<ShowPayload>) => {
-  console.log(action.type);
   switch (action.type) {
     case "INIT_SHOWS":
       const { onsale, status } = action.payload;
       return { ...state, onsale, status, loading: false };
+    case "TRANS":
+      return { ...state, tLoading: true };
+    case "READY":
+      return { ...state, tLoading: false };
     default:
       return state;
   }

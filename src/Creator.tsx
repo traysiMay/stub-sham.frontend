@@ -58,7 +58,10 @@ const Creator = () => {
   const [artists, setArtists] = useState([] as any);
   const [selected, setSelected] = useState();
   const [error, setError] = useState("");
+  const [searching, setSearching] = useState(false);
   const search = async () => {
+    if (searching) return;
+    setSearching(true);
     fetch(process.env.REACT_APP_SERVER + "/search", {
       method: "POST",
       credentials: "include",
@@ -67,7 +70,6 @@ const Creator = () => {
     })
       .then(r => r.json())
       .then(data => {
-        console.log(data);
         if (data.error && data.error.message === "The access token expired") {
           fetch(process.env.REACT_APP_SERVER + "/new_token")
             .then(r => r.json())
@@ -78,7 +80,10 @@ const Creator = () => {
             });
         } else {
           if (data.artists.items.length === 0) setError("nothing found");
-          setArtists(data.artists.items);
+          setTimeout(() => {
+            setArtists(data.artists.items);
+            setSearching(false);
+          }, 1000);
         }
       });
   };
@@ -92,18 +97,21 @@ const Creator = () => {
     })
       .then(r => r.json())
       .then(data => {
+        console.log(data);
         if (data.message === "search_again") {
           search().then(() => pick());
         }
       })
-      .catch(error => search());
+      .catch(error => {
+        search();
+      });
   };
   return (
     <Container>
       <Logo />
       <SearchBox>
-        <div className="header">You have been chosen to create a show</div>
-        <div className="header">SEARCH FOR AN ARTIST</div>
+        <div className="header">You have been chosen to create a show! ☺</div>
+        <div className="header">SEARCH FOR ARTIST</div>
         <Input
           onChange={e => setAritstSearch(e.target.value)}
           onKeyDown={e => {
@@ -112,6 +120,7 @@ const Creator = () => {
         />
         <div className="error">{error}</div>
         <Button onClick={search}>SEARCH</Button>
+        <div>{searching && "searching..."}</div>
       </SearchBox>
       <div>
         {artists.length > 0 &&

@@ -5,8 +5,11 @@ import { SocketPayload } from "./reducers/socket";
 
 const peel = ({ getState, dispatch }: any) => {
   return (next: any) => (action: any) => {
-    console.log(action);
-    console.log(getState());
+    if (process.env.NODE_ENV === "development") {
+      console.log(action);
+      console.log(getState());
+    }
+
     next(action);
   };
 };

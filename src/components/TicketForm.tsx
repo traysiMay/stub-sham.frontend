@@ -40,7 +40,8 @@ function TicketForm({ artist, venue, date, price, pickQuantity, img }: Props) {
           {artist} @ {venue}
         </div>
         <div>{dateFormat(date, "dddd, mmmm dS, yyyy")}</div>
-        <div>{dateFormat(date, "h:MM: TT")}</div>
+        {/* <div>{dateFormat(date, "h:MM: TT")}</div> */}
+        <div>4:20 PM</div>
       </Info>
       <Separator>_______________________</Separator>
       <TicketContainer>
@@ -77,7 +78,7 @@ function TicketForm({ artist, venue, date, price, pickQuantity, img }: Props) {
                   padding: open ? "7px 0" : ""
                 }}
               >
-                {[1, 2, 3, 4, 5, 6, 7, 8].map(t => {
+                {[1, 2, 3, 4, 5, 6].map(t => {
                   const select = t === selected ? "selected" : "";
                   return (
                     <li
